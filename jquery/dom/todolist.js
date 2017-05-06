@@ -16,31 +16,29 @@ function loaded() {
 	    showText();
 	});
 
-
-
-    ////////////////ugokanaiyo
-    $("p").click(
-	// [TODO]と[DONE]をトグルする
+    $("h1").click(
 	function() {
-	    var key, value, jsonVal;
-	    for(var i=0, len=localStorage.length; i<len; i++) {
-		key = localStorage.key(i);
-		value = JSON.parse( localStorage.getItem(key) );
-		if($(this).text.substr(7) === value[1]){
-		    value[0] = !value[0];
-		    // JSON化してアップデート
-		    jsonVal = JSON.stringify(value);
-		    localStorage.setItem(key, jsonVal);
-		    break;
-		}
-	    }
-	    showText();
+	    alert("welcome to the todolist");
 	});
-}////////////////ugokanaiyo
 
-
-
-
+    // [TODO]と[DONE]をトグルする
+    $(document).on("click","#list p",(
+    	function() {
+    	    var key, value, jsonVal;
+    	    for(var i=0, len=localStorage.length; i<len; i++) {
+    		key = localStorage.key(i);
+    		value = JSON.parse( localStorage.getItem(key) );
+    		if($(this).text().substr(7) === value[1]){
+    		    value[0] = !value[0];
+    		    // JSON化してアップデート
+    		    jsonVal = JSON.stringify(value);
+    		    localStorage.setItem(key, jsonVal);
+    		    break;
+    		}
+    	    }
+    	    showText();
+    	}));
+}
 
 // 入力された内容をローカルストレージに保存する
 function saveText() {
@@ -69,7 +67,7 @@ function showText() {
   for(var i=0, len=localStorage.length; i<len; i++) {
     /*--------------------------------------------------------------
       value[0]    value[1]             //=> What you see
-      e.g)
+      e.g.)
       ture        "Wash the dishes"    //=> [TODO] Wash the dishes
       false       "Take a shower"      //=> [DONE] Take a shower
      --------------------------------------------------------------*/
@@ -77,32 +75,11 @@ function showText() {
     value = JSON.parse( localStorage.getItem(key) );
     // 表示する前にエスケープ
     concat = (value[0] ? '[TODO] ':'[DONE] ') + value[1];
-    console.log(concat);
     html.push( $("<p>").html(escapeText(concat)));
     // html.push($("<p>").text(value));
   }
   list.append(html.reverse());
 }
-
-
-
-////////////////ugokanaiyo
-// [TODO]と[DONE]をトグルする
-function toggleStatus(func) {
-    var key, value, jsonVal;
-    for(var i=0, len=localStorage.length; i<len; i++) {
-	key = localStorage.key(i);
-	value = JSON.parse( localStorage.getItem(key) );
-	if($(this).text.substr(7) === value[1]){
-	    value[0] = !value[0];
-	    // JSON化してアップデート
-	    jsonVal = JSON.stringify(value);
-	    localStorage.setItem(key, jsonVal);
-	    break;
-	}
-    }
-    showText();
-}////////////////ugokanaiyo
 
 // 文字をエスケープする
 function escapeText(text) {
